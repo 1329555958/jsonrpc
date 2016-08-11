@@ -17,8 +17,10 @@ plugins {
 }
 
 description = 'This project aims to provide the facility to easily implement JSON-RPC for the java programming language.can user ribbion to loadbalance'
-version = '1.0.0'
+version = '1.0.2'
 group = 'com.netfinworks.jsonrpc'
+//name = 'jsonrpc4j'
+//jar.archiveName = "${jar.baseName}.${jar.extension}"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
