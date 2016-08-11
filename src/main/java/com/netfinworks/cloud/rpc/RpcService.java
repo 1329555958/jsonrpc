@@ -1,4 +1,4 @@
-package com.googlecode.jsonrpc4j;
+package com.netfinworks.cloud.rpc;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -11,7 +11,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target(TYPE)
 @Retention(RUNTIME)
-public @interface JsonRpcService {
+public @interface RpcService {
 
     /**
      * The path that the service is available at.

@@ -1,10 +1,10 @@
-package com.googlecode.jsonrpc4j;
+package com.netfinworks.cloud.rpc;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class Util {
     /**
-     * jsonrpc 服务的地址前缀
+     * rpc 服务的地址前缀
      */
     public static final String RPC_PATH_PREFIX = "/jsonrpc/";
 

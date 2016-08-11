@@ -1,7 +1,9 @@
-package com.googlecode.jsonrpc4j;
+package com.netfinworks.cloud.rpc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.googlecode.jsonrpc4j.spring.sleuth.JsonRpcHttpClientSpanInjector;
+import com.googlecode.jsonrpc4j.IJsonRpcClient;
+import com.googlecode.jsonrpc4j.JsonRpcClient;
+import com.netfinworks.cloud.rpc.sleuth.RpcHttpClientSpanInjector;
 import org.apache.commons.collections.MapUtils;
 import org.kopitubruk.util.json.JSONUtil;
 import org.slf4j.Logger;
@@ -35,9 +37,9 @@ import static com.googlecode.jsonrpc4j.JsonRpcBasicServer.JSONRPC_CONTENT_TYPE;
  * A JSON-RPC client that uses the HTTP protocol.
  */
 @SuppressWarnings("unused")
-public class JsonRpcHttpClient extends JsonRpcClient implements IJsonRpcClient {
+public class RpcHttpClient extends JsonRpcClient implements IJsonRpcClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(JsonRpcHttpClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(RpcHttpClient.class);
 
     private final Map<String, String> headers = new HashMap<>();
     private URL serviceUrl;
@@ -60,19 +62,19 @@ public class JsonRpcHttpClient extends JsonRpcClient implements IJsonRpcClient {
 
 
     /**
-     * Creates the {@link JsonRpcHttpClient} bound to the given {@code serviceUrl}.
+     * Creates the {@link RpcHttpClient} bound to the given {@code serviceUrl}.
      * The headers provided in the {@code headers} map are added to every request
      * made to the {@code serviceUrl}.
      *
      * @param serviceUrl the service end-point URL
      * @param headers    the headers
      */
-    public JsonRpcHttpClient(URL serviceUrl, Map<String, String> headers) {
+    public RpcHttpClient(URL serviceUrl, Map<String, String> headers) {
         this(new ObjectMapper(), serviceUrl, headers);
     }
 
     /**
-     * Creates the {@link JsonRpcHttpClient} bound to the given {@code serviceUrl}.
+     * Creates the {@link RpcHttpClient} bound to the given {@code serviceUrl}.
      * The headers provided in the {@code headers} map are added to every request
      * made to the {@code serviceUrl}.
      *
@@ -80,33 +82,33 @@ public class JsonRpcHttpClient extends JsonRpcClient implements IJsonRpcClient {
      * @param serviceUrl the service end-point URL
      * @param headers    the headers
      */
-    public JsonRpcHttpClient(ObjectMapper mapper, URL serviceUrl, Map<String, String> headers) {
+    public RpcHttpClient(ObjectMapper mapper, URL serviceUrl, Map<String, String> headers) {
         super(mapper);
         this.serviceUrl = serviceUrl;
         this.headers.putAll(headers);
     }
 
     /**
-     * Creates the {@link JsonRpcHttpClient} bound to the given {@code serviceUrl}.
+     * Creates the {@link RpcHttpClient} bound to the given {@code serviceUrl}.
      * The headers provided in the {@code headers} map are added to every request
      * made to the {@code serviceUrl}.
      *
      * @param mapper  the {@link ObjectMapper} to use for json&lt;-&gt;java conversion
      * @param headers the headers
      */
-    public JsonRpcHttpClient(ObjectMapper mapper, Map<String, String> headers) {
+    public RpcHttpClient(ObjectMapper mapper, Map<String, String> headers) {
         super(mapper);
         this.headers.putAll(headers);
     }
 
     /**
-     * Creates the {@link JsonRpcHttpClient} bound to the given {@code serviceUrl}.
+     * Creates the {@link RpcHttpClient} bound to the given {@code serviceUrl}.
      * The headers provided in the {@code headers} map are added to every request
      * made to the {@code serviceUrl}.
      *
      * @param serviceUrl the service end-point URL
      */
-    public JsonRpcHttpClient(URL serviceUrl) {
+    public RpcHttpClient(URL serviceUrl) {
         this(new ObjectMapper(), serviceUrl, new HashMap<String, String>());
     }
 
@@ -149,7 +151,7 @@ public class JsonRpcHttpClient extends JsonRpcClient implements IJsonRpcClient {
             span.logEvent(Span.CLIENT_SEND);
         }
 
-        Map<String, String> spanHeaders = JsonRpcHttpClientSpanInjector.sleuthHeaders(span);
+        Map<String, String> spanHeaders = RpcHttpClientSpanInjector.sleuthHeaders(span);
         spanHeaders.putAll(extraHeaders);
         logger.debug("connection with extraHeaders:{}", spanHeaders);
         HttpURLConnection connection = prepareConnection(spanHeaders);
@@ -280,7 +282,7 @@ public class JsonRpcHttpClient extends JsonRpcClient implements IJsonRpcClient {
             Assert.notNull(getLoadBalancerClient(), "loadBalancerClient is null,need ribbon in the classpath!");
             ServiceInstance serviceInstance = loadBalancerClient.choose(serviceId);
             Assert.notNull(serviceInstance, "can't find service of [" + serviceId + "],eureka is on the right way ?");
-            URL url = new URL(serviceInstance.getUri().toURL(), MapUtils.getString(serviceInstance.getMetadata(), "context-path", "") + Util.addPrefixAndDistinct(servicePath));
+            URL url = new URL(serviceInstance.getUri().toURL(), MapUtils.getString(serviceInstance.getMetadata(), "context-path", "") + com.netfinworks.cloud.rpc.Util.addPrefixAndDistinct(servicePath));
             logger.debug("lb rpc url :{}", url.toString());
             return url;
         }

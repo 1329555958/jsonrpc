@@ -1,8 +1,8 @@
-package com.googlecode.jsonrpc4j.spring;
+package com.netfinworks.cloud.rpc.spring;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.googlecode.jsonrpc4j.JsonRpcService;
-import com.googlecode.jsonrpc4j.Util;
+import com.netfinworks.cloud.rpc.RpcService;
+import com.netfinworks.cloud.rpc.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -28,12 +28,12 @@ import static org.springframework.util.ClassUtils.convertClassNameToResourcePath
 import static org.springframework.util.ResourceUtils.CLASSPATH_URL_PREFIX;
 
 /**
- * Auto-creates proxies for service interfaces annotated with {@link JsonRpcService}.
+ * Auto-creates proxies for service interfaces annotated with {@link RpcService}.
  */
 @SuppressWarnings("unused")
-public class AutoJsonRpcClientProxyCreator implements BeanFactoryPostProcessor, ApplicationContextAware {
+public class AutoRpcClientProxyCreator implements BeanFactoryPostProcessor, ApplicationContextAware {
 
-    private static final Logger logger = LoggerFactory.getLogger(AutoJsonRpcClientProxyCreator.class);
+    private static final Logger logger = LoggerFactory.getLogger(AutoRpcClientProxyCreator.class);
     private ApplicationContext applicationContext;
     private String scanPackage;
     private URL baseUrl;
@@ -57,7 +57,7 @@ public class AutoJsonRpcClientProxyCreator implements BeanFactoryPostProcessor, 
                     MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
                     ClassMetadata classMetadata = metadataReader.getClassMetadata();
                     AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
-                    String jsonRpcPathAnnotation = JsonRpcService.class.getName();
+                    String jsonRpcPathAnnotation = RpcService.class.getName();
                     if (annotationMetadata.isAnnotated(jsonRpcPathAnnotation)) {
                         String className = classMetadata.getClassName();
                         String path = (String) annotationMetadata.getAnnotationAttributes(jsonRpcPathAnnotation).get("value");
@@ -87,7 +87,7 @@ public class AutoJsonRpcClientProxyCreator implements BeanFactoryPostProcessor, 
      */
     private void registerJsonProxyBean(DefaultListableBeanFactory defaultListableBeanFactory, String className, String path) {
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder
-                .rootBeanDefinition(JsonProxyFactoryBean.class)
+                .rootBeanDefinition(ProxyFactoryBean.class)
                 .addPropertyValue("serviceInterface", className);
 
         if (StringUtils.isEmpty(serviceId)) {

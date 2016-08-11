@@ -1,7 +1,9 @@
-package com.googlecode.jsonrpc4j.spring;
+package com.netfinworks.cloud.rpc.spring;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.*;
+import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
+import com.netfinworks.cloud.rpc.RpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -25,20 +27,20 @@ import static org.springframework.util.ClassUtils.getAllInterfacesForClass;
 
 /**
  * <p>This exporter class is deprecated because it exposes all beans from a spring context that has the
- * {@link JsonRpcService} annotation.  If that context is also consuming JSON-RPC services from a remote
+ * {@link RpcService} annotation.  If that context is also consuming JSON-RPC services from a remote
  * system and has proxy clients instantiated in the same context then those proxy clients will also
- * be (inadvertently) exposed by {@link AutoJsonRpcServiceExporter}.  To avoid this, switch over to use
+ * be (inadvertently) exposed by {@link AutoRpcServiceExporter}.  To avoid this, switch over to use
  * {@link AutoJsonRpcServiceImplExporter} which exposes specific implementations of the JSON-RPC services'
- * interfaces rather than all beans that implement {@link JsonRpcService}.</p>
+ * interfaces rather than all beans that implement {@link RpcService}.</p>
  * <p>
  * 通过配置扫描包路径，避免暴露不该暴露的rpc接口
  * <p>
  */
 //@Deprecated
 @SuppressWarnings("unused")
-public class AutoJsonRpcServiceExporter implements BeanFactoryPostProcessor {
+public class AutoRpcServiceExporter implements BeanFactoryPostProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(AutoJsonRpcServiceExporter.class);
+    private static final Logger logger = LoggerFactory.getLogger(AutoRpcServiceExporter.class);
 
 
     private ObjectMapper objectMapper;
@@ -101,7 +103,7 @@ public class AutoJsonRpcServiceExporter implements BeanFactoryPostProcessor {
         final Map<String, String> serviceBeanNames = new HashMap<>();
         hasScanPackages();
         for (String beanName : beanFactory.getBeanDefinitionNames()) {
-            JsonRpcService jsonRpcPath = beanFactory.findAnnotationOnBean(beanName, JsonRpcService.class);
+            RpcService jsonRpcPath = beanFactory.findAnnotationOnBean(beanName, RpcService.class);
             if (hasServiceAnnotation(jsonRpcPath)) {
                 if (!isInPackage(beanFactory.getBeanDefinition(beanName).getBeanClassName(), beanName)) {
                     continue;
@@ -109,7 +111,7 @@ public class AutoJsonRpcServiceExporter implements BeanFactoryPostProcessor {
                 String pathValue = jsonRpcPath.value();
                 //默认使用bean名称作为路径
                 if (StringUtils.isEmpty(pathValue)) {
-                    pathValue = Util.className2Path(getServiceInterfaceName(beanFactory, beanName));
+                    pathValue = com.netfinworks.cloud.rpc.Util.className2Path(getServiceInterfaceName(beanFactory, beanName));
                 }
                 logger.debug("Found JSON-RPC path '{}' for bean [{}].", pathValue, beanName);
                 if (isNotDuplicateService(serviceBeanNames, beanName, pathValue))
@@ -130,7 +132,7 @@ public class AutoJsonRpcServiceExporter implements BeanFactoryPostProcessor {
     private static String getServiceInterfaceName(ConfigurableListableBeanFactory beanFactory, String beanName) {
         BeanDefinition serviceBeanDefinition = beanFactory.getBeanDefinition(beanName);
         for (Class<?> currentInterface : getBeanInterfaces(serviceBeanDefinition, beanFactory.getBeanClassLoader())) {
-            if (currentInterface.isAnnotationPresent(JsonRpcService.class)) {
+            if (currentInterface.isAnnotationPresent(RpcService.class)) {
                 return currentInterface.getName();
             }
         }
@@ -161,7 +163,7 @@ public class AutoJsonRpcServiceExporter implements BeanFactoryPostProcessor {
         return true;
     }
 
-    private static boolean hasServiceAnnotation(JsonRpcService jsonRpcPath) {
+    private static boolean hasServiceAnnotation(RpcService jsonRpcPath) {
         return jsonRpcPath != null;
     }
 
@@ -179,7 +181,7 @@ public class AutoJsonRpcServiceExporter implements BeanFactoryPostProcessor {
      * export a bean automatically, the name should start with a '/'.
      */
     private String makeUrlPath(String servicePath) {
-        return Util.addPrefixAndDistinct(servicePath);
+        return com.netfinworks.cloud.rpc.Util.addPrefixAndDistinct(servicePath);
     }
 
     /**
@@ -187,12 +189,12 @@ public class AutoJsonRpcServiceExporter implements BeanFactoryPostProcessor {
      */
     private void registerServiceProxy(DefaultListableBeanFactory defaultListableBeanFactory, String servicePath,
                                       String serviceBeanName) {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(JsonServiceExporter.class)
+        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(ServiceExporter.class)
                 .addPropertyReference("service", serviceBeanName);
         BeanDefinition serviceBeanDefinition = findBeanDefinition(defaultListableBeanFactory, serviceBeanName);
         for (Class<?> currentInterface : getBeanInterfaces(serviceBeanDefinition, defaultListableBeanFactory
                 .getBeanClassLoader())) {
-            if (currentInterface.isAnnotationPresent(JsonRpcService.class)) {
+            if (currentInterface.isAnnotationPresent(RpcService.class)) {
                 String serviceInterface = currentInterface.getName();
                 logger.debug("Registering interface '{}' for JSON-RPC bean [{}].", serviceInterface, serviceBeanName);
                 builder.addPropertyValue("serviceInterface", serviceInterface);

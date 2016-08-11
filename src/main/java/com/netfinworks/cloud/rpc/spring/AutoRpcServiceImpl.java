@@ -1,4 +1,7 @@
-package com.googlecode.jsonrpc4j.spring;
+package com.netfinworks.cloud.rpc.spring;
+
+import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
+import com.netfinworks.cloud.rpc.RpcService;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -16,18 +19,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(TYPE)
 @Retention(RUNTIME)
-@Deprecated
-public @interface AutoJsonRpcServiceImpl {
+public @interface AutoRpcServiceImpl {
 
-	/**
-	 * This value may contain a list of <em>additional</em> paths that the JSON-RPC service will be exposed on.
-	 * These are in addition to any which are defined on the {@link com.googlecode.jsonrpc4j.JsonRpcService}
-	 * annotation preferably on the service interface.  This might be used, for example, where you still want
-	 * to expose a service on legacy paths for older clients.
-	 *
-	 * @return an array of additional paths
-	 * */
+    /**
+     * This value may contain a list of <em>additional</em> paths that the JSON-RPC service will be exposed on.
+     * These are in addition to any which are defined on the {@link RpcService}
+     * annotation preferably on the service interface.  This might be used, for example, where you still want
+     * to expose a service on legacy paths for older clients.
+     *
+     * @return an array of additional paths
+     */
 
-	String[] additionalPaths() default {};
+    String[] additionalPaths() default {};
 
 }

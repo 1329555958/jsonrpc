@@ -17,8 +17,8 @@ plugins {
 }
 
 description = 'This project aims to provide the facility to easily implement JSON-RPC for the java programming language.can user ribbion to loadbalance'
-version = '1.0.2'
-group = 'com.netfinworks.jsonrpc'
+version = '2.0.0'
+group = 'com.netfinworks.cloud.rpc'
 //name = 'jsonrpc4j'
 //jar.archiveName = "${jar.baseName}.${jar.extension}"
 
@@ -179,7 +179,7 @@ bintray {
         websiteUrl = 'https://briandilley.github.io/jsonrpc4j'
         issueTrackerUrl = 'https://github.com/briandilley/jsonrpc4j/issues'
         vcsUrl = 'git@github.com:briandilley/jsonrpc4j.git'
-        githubRepo = 'briandilley/jsonrpc'
+        githubRepo = 'briandilley/rpc'
         githubReleaseNotesFile = 'README.md'
         labels = ['json', 'rpc', 'java']
         publicDownloadNumbers = true

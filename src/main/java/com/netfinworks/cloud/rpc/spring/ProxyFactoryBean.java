@@ -1,8 +1,8 @@
-package com.googlecode.jsonrpc4j.spring;
+package com.netfinworks.cloud.rpc.spring;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.JsonRpcClient.RequestListener;
-import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
+import com.netfinworks.cloud.rpc.RpcHttpClient;
 import com.googlecode.jsonrpc4j.ReflectionUtil;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -32,12 +32,12 @@ import java.util.Map;
  * (aka consumer) for accessing an HTTP based JSON-RPC service.
  */
 @SuppressWarnings("unused")
-class JsonProxyFactoryBean extends UrlBasedRemoteAccessor implements MethodInterceptor, InitializingBean, FactoryBean<Object>, ApplicationContextAware {
+class ProxyFactoryBean extends UrlBasedRemoteAccessor implements MethodInterceptor, InitializingBean, FactoryBean<Object>, ApplicationContextAware {
 
     private Object proxyObject = null;
     private RequestListener requestListener = null;
     private ObjectMapper objectMapper = null;
-    private JsonRpcHttpClient jsonRpcHttpClient = null;
+    private RpcHttpClient jsonRpcHttpClient = null;
     private Map<String, String> extraHttpHeaders = new HashMap<>();
     private String contentType;
 
@@ -80,7 +80,7 @@ class JsonProxyFactoryBean extends UrlBasedRemoteAccessor implements MethodInter
         }
 
         try {
-            jsonRpcHttpClient = new JsonRpcHttpClient(objectMapper, extraHttpHeaders);
+            jsonRpcHttpClient = new RpcHttpClient(objectMapper, extraHttpHeaders);
             jsonRpcHttpClient.setRequestListener(requestListener);
             jsonRpcHttpClient.setSslContext(sslContext);
             jsonRpcHttpClient.setHostNameVerifier(hostNameVerifier);

@@ -1,6 +1,6 @@
-package com.googlecode.jsonrpc4j.spring.sleuth;
+package com.netfinworks.cloud.rpc.sleuth;
 
-import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
+import com.netfinworks.cloud.rpc.RpcHttpClient;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.SpanExtractor;
@@ -13,10 +13,10 @@ import java.util.Map;
 /**
  * Created by weichunhe on 2016/7/12.
  */
-public class JsonRpcHttpClientSpanInjector implements SpanInjector<JsonRpcHttpClient>,
-        SpanExtractor<JsonRpcHttpClient> {
+public class RpcHttpClientSpanInjector implements SpanInjector<RpcHttpClient>,
+        SpanExtractor<RpcHttpClient> {
     @Override
-    public void inject(Span span, JsonRpcHttpClient carrier) {
+    public void inject(Span span, RpcHttpClient carrier) {
         System.out.println("sleuth--headers----------------" + sleuthHeaders(span));
     }
 
@@ -58,7 +58,7 @@ public class JsonRpcHttpClientSpanInjector implements SpanInjector<JsonRpcHttpCl
     }
 
     @Override
-    public Span joinTrace(JsonRpcHttpClient carrier) {
+    public Span joinTrace(RpcHttpClient carrier) {
         return null;
     }
 }
