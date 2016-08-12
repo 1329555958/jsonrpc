@@ -17,13 +17,13 @@ plugins {
 }
 
 description = 'This project aims to provide the facility to easily implement JSON-RPC for the java programming language.can user ribbion to loadbalance'
-version = '2.0.0'
+version = '2.0.1-SNAPSHOT'
 group = 'com.netfinworks.cloud.rpc'
 //name = 'jsonrpc4j'
 //jar.archiveName = "${jar.baseName}.${jar.extension}"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 compileJava {
     options.encoding = 'UTF-8'
@@ -157,6 +157,14 @@ publishing {
         maven {
             name 'nexus'
             url 'http://nexus.vfinance.cn:9081/content/repositories/releases/'
+            credentials {
+                username = 'admin'
+                password = 'scm1qaz!'
+            }
+        }
+        maven {
+            name 'nexus-snapshot'
+            url 'http://nexus.vfinance.cn:9081/content/repositories/snapshots/'
             credentials {
                 username = 'admin'
                 password = 'scm1qaz!'

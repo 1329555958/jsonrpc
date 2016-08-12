@@ -47,6 +47,7 @@ import static org.springframework.util.ClassUtils.getAllInterfacesForClass;
  * for details.</p>
  */
 @SuppressWarnings("unused")
+@Deprecated
 public class AutoRpcServiceImplExporter implements BeanFactoryPostProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter.class);

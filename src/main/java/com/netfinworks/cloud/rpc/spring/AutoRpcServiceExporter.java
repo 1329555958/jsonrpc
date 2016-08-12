@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.*;
 import com.googlecode.jsonrpc4j.spring.AutoJsonRpcServiceImplExporter;
 import com.netfinworks.cloud.rpc.RpcService;
+import com.netfinworks.cloud.rpc.endpoint.ServiceContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.util.StringUtils;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -130,13 +132,18 @@ public class AutoRpcServiceExporter implements BeanFactoryPostProcessor {
      * @return 接口名称, 找不到时返回bean名称
      */
     private static String getServiceInterfaceName(ConfigurableListableBeanFactory beanFactory, String beanName) {
+        Class inf = getServiceInterface(beanFactory, beanName);
+        return inf.getName();
+    }
+
+    private static Class getServiceInterface(ConfigurableListableBeanFactory beanFactory, String beanName) {
         BeanDefinition serviceBeanDefinition = beanFactory.getBeanDefinition(beanName);
         for (Class<?> currentInterface : getBeanInterfaces(serviceBeanDefinition, beanFactory.getBeanClassLoader())) {
             if (currentInterface.isAnnotationPresent(RpcService.class)) {
-                return currentInterface.getName();
+                return currentInterface;
             }
         }
-        return beanName;
+        return null;
     }
 
     @SuppressWarnings("Convert2streamapi")
@@ -170,8 +177,12 @@ public class AutoRpcServiceExporter implements BeanFactoryPostProcessor {
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) beanFactory;
         Map<String, String> servicePathToBeanName = findServiceBeanDefinitions(defaultListableBeanFactory);
+        String path = null, beanName = null;
         for (Entry<String, String> entry : servicePathToBeanName.entrySet()) {
-            registerServiceProxy(defaultListableBeanFactory, makeUrlPath(entry.getKey()), entry.getValue());
+            path = makeUrlPath(entry.getKey());
+            beanName = entry.getValue();
+            ServiceContent.addRpcService(path, getServiceInterface(defaultListableBeanFactory, beanName));
+            registerServiceProxy(defaultListableBeanFactory, path, beanName);
         }
     }
 
