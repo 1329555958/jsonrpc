@@ -1,0 +1,28 @@
+<div ng-controller="RpcController">
+    <div ng-repeat="rpc in rpcs">
+        <div class="box box-solid no-margin box-success" ng-repeat="(path,klass) in rpc">
+            <div class="box-header">
+                <div class="box-title">{{path}}</div>
+                <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <div class="box box-default box-solid" ng-repeat="(method,params) in klass">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{method}}</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        {{params}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
