@@ -1,12 +1,6 @@
 /**
  * Created by weichunhe on 2015/12/29.
  */
-// app 根路径，包含app名称
-window.APPROOT = (function () {
-    var i = window.location.pathname.indexOf('index');
-    i = i == -1 ? window.location.pathname.indexOf('static') : i;
-    return window.location.pathname.substring(0, i - 1) || "";
-})();
 /**
  * JQUERY 默认ajax设置
  */

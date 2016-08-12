@@ -18,7 +18,35 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        {{params}}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div>请求参数: &nbsp;&nbsp;
+                                    <button ng-click="send(path,method)" class="btn btn-primary">Test</button>
+                                </div>
+                                <div ui-ace="{useWrapMode : true,mode:'json',advanced: {
+                                          highlightActiveLine: true
+                                        },
+                                        rendererOptions: {
+                                          showPrintMargin: false,
+                                          maxLines: 4294967296
+                                        }}" ng-model="jsonParams[jsonParamsKey(path,method)]"
+                                     ng-init="jsonParams[jsonParamsKey(path,method)]=aceJson(params)"></div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="">响应结果:&nbsp;&nbsp;
+                                    <button class="btn btn-warning" ng-click="clearResult(path,method)">清空</button>
+                                </div>
+                                <div ui-ace="{useWrapMode : true,mode:'json',advanced: {
+                                          highlightActiveLine: true
+                                        },
+                                        rendererOptions: {
+                                          showPrintMargin: false,
+                                          maxLines: 4294967296
+                                        }}" ng-model="jsonResults[jsonParamsKey(path,method)]"></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

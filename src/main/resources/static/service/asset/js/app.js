@@ -3,7 +3,7 @@
  */
 define('app', ['config', 'base'], function (config) {
 
-    var app = angular.module('app', ['ngExtend', 'ui.router']);
+    var app = angular.module('app', ['ngExtend', 'ui.router', 'ui.ace']);
     angular.CFG = config; //保存配置数据
     app.constant('VIEWS_BASE_PATH', config.views_base_path);
 
