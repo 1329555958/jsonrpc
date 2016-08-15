@@ -27,7 +27,7 @@ require("app").register.controller("RpcController", function ($scope, $timeout, 
     };
     function result(key) {
         return function (result) {
-            $scope.jsonResults[key] = $scope.aceJson(result.result);
+            $scope.jsonResults[key] = $scope.aceJson(result.error || result.result);
             $scope.loading[key] = false;
             $scope.$apply();
         }
