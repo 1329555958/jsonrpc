@@ -4,7 +4,7 @@
 define('config', function () {
     var config = {};
 
-    config.views_base_path = APPROOT + 'service/asset/views'; // 视图根目录
+    config.views_base_path = APPROOT + 'jsonrpc/asset/views'; // 视图根目录
     config.view_suffix = '.html'; // 视图后缀
     config.load_interface_url = '/data/interface.json'; // 加载接口数据的url
 

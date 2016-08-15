@@ -17,7 +17,7 @@ plugins {
 }
 
 description = 'This project aims to provide the facility to easily implement JSON-RPC for the java programming language.can user ribbion to loadbalance'
-version = '2.0.7-SNAPSHOT'
+version = '2.0.11-SNAPSHOT'
 group = 'com.netfinworks.cloud.rpc'
 //name = 'jsonrpc4j'
 //jar.archiveName = "${jar.baseName}.${jar.extension}"
@@ -93,6 +93,10 @@ dependencies {
 
 }
 
+processResources {
+    include '**/*.*'//, 'static/jsonrpc/asset/**/*.css', 'static/jsonrpc/asset/**/*.js', 'static/jsonrpc/*.*'
+    exclude 'static/jsonrpc/node_modules/**'
+}
 jar {
     manifest {
         instruction 'Import-Package',

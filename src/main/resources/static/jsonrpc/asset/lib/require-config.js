@@ -6,7 +6,7 @@
     // APPROOT 在home.html中定义，表示工程的根目录
 
     var min_suffix = _t.UGLIFY ? '-min' : '', // 是否使用压缩文件
-        ROOT = APPROOT + 'service/asset/', BASE = ROOT + 'js/', LIB = ROOT + 'lib/', BOWER_ROOT = ROOT
+        ROOT = APPROOT + 'jsonrpc/asset/', BASE = ROOT + 'js/', LIB = ROOT + 'lib/', BOWER_ROOT = ROOT
             + 'bower_components/';
     var config = {
         baseUrl: BASE,

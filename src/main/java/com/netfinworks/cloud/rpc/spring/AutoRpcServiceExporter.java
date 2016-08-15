@@ -181,7 +181,8 @@ public class AutoRpcServiceExporter implements BeanFactoryPostProcessor {
         for (Entry<String, String> entry : servicePathToBeanName.entrySet()) {
             path = makeUrlPath(entry.getKey());
             beanName = entry.getValue();
-            ServiceContent.addRpcService(path, getServiceInterface(defaultListableBeanFactory, beanName));
+            Class bean = getBeanClass(defaultListableBeanFactory.getBeanDefinition(beanName), defaultListableBeanFactory.getBeanClassLoader());
+            ServiceContent.addRpcService(path, bean, getServiceInterface(defaultListableBeanFactory, beanName));
             registerServiceProxy(defaultListableBeanFactory, path, beanName);
         }
     }
@@ -255,14 +256,23 @@ public class AutoRpcServiceExporter implements BeanFactoryPostProcessor {
         throw new RuntimeException(format("Bean with name '%s' can no longer be found.", serviceBeanName));
     }
 
-    private static Class<?>[] getBeanInterfaces(BeanDefinition serviceBeanDefinition, ClassLoader beanClassLoader) {
+    private static Class getBeanClass(BeanDefinition serviceBeanDefinition, ClassLoader beanClassLoader) {
         String beanClassName = serviceBeanDefinition.getBeanClassName();
         try {
             Class<?> beanClass = forName(beanClassName, beanClassLoader);
-            return getAllInterfacesForClass(beanClass, beanClassLoader);
-        } catch (ClassNotFoundException | LinkageError e) {
+            return beanClass;
+        } catch (Exception e) {
             throw new RuntimeException(format("Cannot find bean class '%s'.", beanClassName), e);
         }
+    }
+
+    private static Class<?>[] getBeanInterfaces(BeanDefinition serviceBeanDefinition, ClassLoader beanClassLoader) {
+        Class beanClass = getBeanClass(serviceBeanDefinition, beanClassLoader);
+        return getBeanInterfaces(beanClass, beanClassLoader);
+    }
+
+    private static Class<?>[] getBeanInterfaces(Class beanClass, ClassLoader beanClassLoader) {
+        return getAllInterfacesForClass(beanClass, beanClassLoader);
     }
 
     /**

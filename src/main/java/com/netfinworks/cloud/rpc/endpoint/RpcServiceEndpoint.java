@@ -15,7 +15,7 @@ import java.util.List;
 public class RpcServiceEndpoint extends AbstractEndpoint<ServiceContent> {
 
     public RpcServiceEndpoint() {
-        super("services");
+        super("jsonrpc");
     }
 
     @Override
