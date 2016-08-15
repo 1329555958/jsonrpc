@@ -16,9 +16,9 @@ require("app").register.controller("RpcController", function ($scope, $timeout, 
     //         }
     //     }]
     // }.rpcs;
-    $myhttp('rpcsLoading', $scope).get("../../../jsonrpc", function (data) {
+    $myhttp('rpcsLoading', $scope).get("jsonrpc", function (data) {
         $scope.rpcs = data.rpcs;
-        if (!$scope.rpcs) {
+        if (!$scope.rpcs || !$scope.rpcs.length) {
             $scope.hasRpcs = false;
         }
     });
@@ -35,7 +35,7 @@ require("app").register.controller("RpcController", function ($scope, $timeout, 
 
     $scope.send = function (path, method) {
         var key = $scope.jsonParamsKey(path, method);
-        var endpoint = APPROOT + path;
+        var endpoint = path;
         try {
             var paramArr = JSON.parse($scope.jsonParams[key]);
         } catch (e) {
