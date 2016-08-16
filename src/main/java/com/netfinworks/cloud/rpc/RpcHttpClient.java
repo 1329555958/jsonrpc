@@ -280,10 +280,12 @@ public class RpcHttpClient extends JsonRpcClient implements IJsonRpcClient {
     public URL getServiceUrl() throws MalformedURLException {
         if (!StringUtils.isEmpty(serviceId)) {
             Assert.notNull(getLoadBalancerClient(), "loadBalancerClient is null,need ribbon in the classpath!");
+            long start = System.currentTimeMillis();
             ServiceInstance serviceInstance = loadBalancerClient.choose(serviceId);
+            long take = System.currentTimeMillis() - start;
             Assert.notNull(serviceInstance, "can't find service of [" + serviceId + "],eureka is on the right way ?");
             URL url = new URL(serviceInstance.getUri().toURL(), MapUtils.getString(serviceInstance.getMetadata(), "context-path", "") + com.netfinworks.cloud.rpc.Util.addPrefixAndDistinct(servicePath));
-            logger.debug("lb rpc url :{}", url.toString());
+            logger.debug("got lb url={},take {}ms", url.toString(), take);
             return url;
         }
         return serviceUrl;

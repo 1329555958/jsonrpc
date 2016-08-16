@@ -7,7 +7,7 @@ objects to and from json objects (and other things related to
 JSON-RPC). 
 
 [![Javadoc](https://img.shields.io/badge/javadoc-OK-blue.svg)](http://briandilley.github.io/jsonrpc4j/javadoc/1.4.6/)
-[ ![Download](https://api.bintray.com/packages/gaborbernat/maven/com.github.briandilley.jsonrpc4j%3Ajsonrpc4j/images/download.svg) ](https://bintray.com/gaborbernat/maven/com.github.briandilley.jsonrpc4j%3Ajsonrpc4j/_latestVersion)
+[![Download](https://api.bintray.com/packages/gaborbernat/maven/com.github.briandilley.jsonrpc4j%3Ajsonrpc4j/images/download.svg) ](https://bintray.com/gaborbernat/maven/com.github.briandilley.jsonrpc4j%3Ajsonrpc4j/_latestVersion)
 [![Travis CI](https://travis-ci.org/gaborbernat/jsonrpc4j.svg?branch=master)](https://travis-ci.org/gaborbernat/jsonrpc4j)
 [![GitHub commits](https://img.shields.io/github/commits-since/briandilley/jsonrpc4j/1.4.6.svg)](https://github.com/briandilley/jsonrpc4j/compare/1.4.6...master)
 [![Maintenance](https://img.shields.io/maintenance/yes/2016.svg)](https://github.com/briandilley/jsonrpc4j/commits/master)
