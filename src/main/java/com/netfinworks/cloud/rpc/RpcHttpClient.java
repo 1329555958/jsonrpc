@@ -21,10 +21,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import java.io.*;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.URL;
+import java.net.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -155,7 +152,17 @@ public class RpcHttpClient extends JsonRpcClient implements IJsonRpcClient {
         spanHeaders.putAll(extraHeaders);
         logger.debug("connection with extraHeaders:{}", spanHeaders);
         HttpURLConnection connection = prepareConnection(spanHeaders);
-        connection.connect();
+        try {
+            connection.connect();
+        } catch (Exception e) {
+            //连接异常，重试一次
+            if (e instanceof ConnectException) {
+                logger.warn("{},连接异常,进行一次重试:{}", connection.getURL().toString(), e.getMessage());
+                connection = prepareConnection(spanHeaders);
+                connection.connect();
+            }
+        }
+
         try {
             try (OutputStream send = connection.getOutputStream()) {
                 super.invoke(methodName, argument, send);
