@@ -61,13 +61,10 @@ public class ServiceContent {
             Class[] paramsTypes = method.getParameterTypes();
             List<Map<String, Object>> nameParams = new ArrayList<>();
             List<String> paramNames = Util.getMethodParamNames(bean, method);
-
             for (int i = 0; i < paramsTypes.length; i++) {
                 Map<String, Object> nameParam = new HashedMap();
-
                 nameParam.put(paramNames.get(i), Util.getBeanByType(paramsTypes[i]));
                 nameParams.add(nameParam);
-
             }
             nameMethod.put(method.getName(), nameParams);
         }
