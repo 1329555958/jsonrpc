@@ -16,7 +16,7 @@ JSON-RPC).
 - 权限校验需排除jsonrpc、jsonrpc/**
 - 静态资源目录需包含static(spring boot 默认包含此目录)
 - 参数尽量不使用接口类型，如果使用接口类型需要添加接口对应的实现类
-`ServiceContent.addBean4Inf(UserInf.class, user);`
+`Util.addBean4Inf(UserInf.class, user);`
 - 尽量不重载方法，目前测试界面只根据方法名进行测试
 - 
 

@@ -490,7 +490,7 @@ public class JsonRpcBasicServer {
             try {
                 convertedParams[i] = mapper.readValue(paramJsonParser, paramJavaType);
             } catch (Exception e) {
-                paramJavaType = mapper.getTypeFactory().constructType(ServiceContent.getBeanClassOfInf(parameterTypes[i]));
+                paramJavaType = mapper.getTypeFactory().constructType(com.netfinworks.cloud.rpc.Util.getBeanClassOfInf(parameterTypes[i]));
                 convertedParams[i] = mapper.readValue(paramJsonParser, paramJavaType);
             }
 
