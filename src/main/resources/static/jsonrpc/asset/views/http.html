@@ -1,4 +1,8 @@
 <div ng-controller="HttpController">
+    <div class="callout callout-warning lead">
+        <h4>说明</h4>
+        <p>这里目前只提供GET/POST方式的数据请求!</p>
+    </div>
     <button ng-show="httpsLoading" class="btn btn-success"><i class="fa fa-spinner fa-spin"></i></button>
     <div class="callout callout-info lead" ng-show="!hasHttps">
         <h4>没有发现http服务列表!</h4>
@@ -16,7 +20,9 @@
                 <div ng-repeat="method in methods">
                     <div class="box box-default box-solid" ng-repeat="(name,params) in method">
                         <div class="box-header with-border">
-                            <h3 class="box-title">{{params.urls}}<small>{{name}}</small></h3>
+                            <h3 class="box-title">{{params.urls}}
+                                <small>{{name}}</small>
+                            </h3>
                             <div class="box-tools pull-right">
                                 <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                                 </button>

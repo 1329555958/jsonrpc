@@ -35,8 +35,16 @@ public class Util {
     //接口实例化时对应的实现类
     private static Map<Class, Object> infBeanMap = new HashMap<>();
 
+    //以此为父类的
+    private static List<Class> parentClass = new ArrayList<>();
+
     //添加基本类型
     static {
+        parentClass.add(List.class);
+        parentClass.add(Map.class);
+        parentClass.add(Set.class);
+        parentClass.add(Object[].class);
+
         infBeanMap.put(int.class, 0);
         infBeanMap.put(float.class, 0);
         infBeanMap.put(double.class, 0);
@@ -48,6 +56,8 @@ public class Util {
         infBeanMap.put(List.class, new ArrayList<>());
         infBeanMap.put(Map.class, new HashMap<>());
         infBeanMap.put(Set.class, new HashSet<>());
+        infBeanMap.put(Object[].class, new ArrayList<>());
+
     }
 
     @SuppressWarnings("PMD.AvoidUsingHardCodedIP")
@@ -145,11 +155,17 @@ public class Util {
         try {
             param = infBeanMap.get(type);
             if (param == null) {
-                param = type.newInstance();
+                Class beanClass = getBeanClassOfInf(type);
+                if (beanClass != null) {
+                    param = beanClass.newInstance();
+                } else {
+                    param = type.newInstance();
+                }
+
             }
             return (T) param;
         } catch (Exception e) {
-            log.error("can't newInstance of {}", type.getClass().getName(), e);
+            log.error("can't newInstance of {}", type.getName(), e);
         }
         return null;
     }
@@ -175,11 +191,20 @@ public class Util {
         if (bean != null) {
             return bean.getClass();
         }
+        //判断父类
+        for (Class klass : parentClass) {
+            if (klass.isAssignableFrom((Class<?>) inf)) {
+                return infBeanMap.get(klass).getClass();
+            }
+        }
         return null;
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException {
+        System.out.println(ArrayList.class.newInstance());
+        List<String> list = new ArrayList<>();
+        System.out.println(infBeanMap.get(list.getClass()));
         Class t = HttpServletResponse.class;
 
         System.out.println(ServletResponse.class.isAssignableFrom(ServletResponse.class));

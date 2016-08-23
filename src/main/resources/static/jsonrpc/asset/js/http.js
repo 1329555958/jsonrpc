@@ -60,6 +60,10 @@ require("app").register.controller("HttpController", function ($scope, $timeout,
                 }
             });
             $myhttp(key, $scope.loading).post(url, p, function (data) {
+                try {
+                    data = JSON.parse(data);
+                } catch (e) {
+                }
                 $scope.jsonResults[key] = $scope.aceJson(data);
             });
         }
