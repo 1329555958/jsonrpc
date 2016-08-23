@@ -5,9 +5,9 @@
  * JQUERY 默认ajax设置
  */
 $.ajaxSetup({
-    headers: {'Content-type': 'application/json;charset=UTF-8', 'accept': 'application/json'},
+    // headers: {'Content-type': 'application/json;charset=UTF-8'},
     beforeSend: function (xhr, setting) {
-        setting.url = APPROOT + setting.url;
+        setting.url = (APPROOT + setting.url).replace(/\/+/g, '/');
     }
 });
 //新增扩展

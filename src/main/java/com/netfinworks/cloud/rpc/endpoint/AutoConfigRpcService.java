@@ -1,5 +1,6 @@
 package com.netfinworks.cloud.rpc.endpoint;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class AutoConfigRpcService {
 
     @Bean
-    public RpcServiceEndpoint serviceEndpoint() {
-        return new RpcServiceEndpoint();
+    public RpcServiceEndpoint serviceEndpoint(ApplicationContext context) {
+        return new RpcServiceEndpoint(context);
     }
 }

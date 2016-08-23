@@ -14,13 +14,19 @@ import java.util.List;
  */
 public class RpcServiceEndpoint extends AbstractEndpoint<ServiceContent> {
 
-    public RpcServiceEndpoint() {
+    private ApplicationContext context;
+
+    public RpcServiceEndpoint(ApplicationContext context) {
         super("jsonrpc");
+        this.context = context;
     }
 
     @Override
     public ServiceContent invoke() {
-        return ServiceContent.newInstance();
+        ServiceContent content = ServiceContent.newInstance();
+        content.setContext(context);
+        return content;
     }
+
 
 }

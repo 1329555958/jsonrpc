@@ -5,8 +5,7 @@
 (function (window, angular, undefined) {
     'use strict';
 
-    angular.module('ngExtend', ['ng']).
-    provider('$require', function rq() {
+    angular.module('ngExtend', ['ng']).provider('$require', function rq() {
         /**
          * 异步加载配置
          * @param deps 如果是单个依赖可以直接写名字,多个依赖使用数组,路径根据require配置
@@ -30,31 +29,19 @@
         this.$get = function () {
             return this;
         }
-    }).
-
-    factory('$myhttp', function ($rootScope) {
+    }).factory('$myhttp', function ($rootScope) {
         function apply(obj) {
-             if(obj && obj.responseText && obj.responseText.indexOf('理财平台-登录') !== -1){
-                 window.location.href = APPROOT+"/login";
-                 return;
-             }
+            if (obj && obj.responseText && obj.responseText.indexOf('理财平台-登录') !== -1) {
+                window.location.href = APPROOT + "/login";
+                return;
+            }
             setTimeout(function () {
                 $rootScope.$apply();
             }, 300);
         }
 
         function err(xhr, status, err) {
-            var resp = xhr.responseJSON;
-            if (resp.status === "NEED_LOGIN") {
-                window.location.href = resp.reason;
-                return;
-            }
-            var msg = resp.reason;
-            var reg = new RegExp("[\\u4E00-\\u9FFF]+", "g");
-            if (!reg.test(msg)) {
-                msg = resp.exception_id ? ("错误编号=" + resp.exception_id) : "";
-            }
-            angular.info('操作失败:' + msg);
+            alert('操作失败:' + xhr.responseText);
             console.error('$myhttp请求出错', xhr, status, err);
         }
 
@@ -88,7 +75,7 @@
                         $rootScope.$emit('HTTP_EVENT', {name: name, data: 'end'});
                     }
                 }
-                apply.apply(null,arguments);
+                apply.apply(null, arguments);
             }
 
             return {
@@ -104,8 +91,7 @@
         http.post = post;
 
         return http;
-    }).
-    factory('$rest', function ($http) {
+    }).factory('$rest', function ($http) {
         var INF_DATA = {}, INF_INDEX = {};
         //获取接口数据
         var PGetInfData = $http.get(angular.CFG.load_interface_url);
