@@ -8,6 +8,9 @@ $.ajaxSetup({
     // headers: {'Content-type': 'application/json;charset=UTF-8'},
     beforeSend: function (xhr, setting) {
         setting.url = (APPROOT + setting.url).replace(/\/+/g, '/');
+        if (window.CONTENT_TYPE) {
+            xhr.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+        }
     }
 });
 //新增扩展

@@ -31,8 +31,9 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-6">
+
                                     <div class="form-group form-group-inline">
-                                        <label>请求参数:</label>
+                                        <label style="display: inline;width: auto;">请求参数:</label>
                                         <select style="width: 100px" class="form-control"
                                                 ng-init="httpMethod[jsonParamsKey(name,params)]='POST'"
                                                 ng-model="httpMethod[jsonParamsKey(name,params)]">
@@ -45,10 +46,14 @@
                                                 GET
                                             </option>
                                         </select>
-                                        <button ng-click="send(name,params)" class="btn btn-primary btn-form">Test<i
+                                        <button ng-click="send(name,params,useRequestBody)"
+                                                class="btn btn-primary btn-form">Test<i
                                                 class="fa fa-spinner fa-spin"
                                                 ng-show="loading[jsonParamsKey(name,params)]"></i></button>
+                                        <label style="display: inline;width: auto;"><input type="checkbox"
+                                                                                           ng-model="useRequestBody"/>@RequestBody</label>
                                     </div>
+
                                     <div ui-ace="{useWrapMode : true,mode:'json',advanced: {
                                           highlightActiveLine: true
                                         },

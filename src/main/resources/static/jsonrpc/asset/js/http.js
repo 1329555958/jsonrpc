@@ -26,17 +26,10 @@ require("app").register.controller("HttpController", function ($scope, $timeout,
     $scope.aceJson = function (obj) {
         return JSON.stringify(obj, null, '\t');
     };
-    function result(key) {
-        return function (result) {
-            $scope.jsonResults[key] = $scope.aceJson(result.error || result.result);
-            $scope.loading[key] = false;
-            $scope.$apply();
-        }
-    }
 
     _.templateSettings.interpolate = /{([\s\S]+?)}/g;
 
-    $scope.send = function (name, params) {
+    $scope.send = function (name, params, useRequestBody) {
         var key = $scope.jsonParamsKey(name, params);
         try {
             var param = JSON.parse($scope.jsonParams[key]);
@@ -59,6 +52,12 @@ require("app").register.controller("HttpController", function ($scope, $timeout,
                     p[k] = v;
                 }
             });
+            if (useRequestBody) {
+                window.CONTENT_TYPE = 'application/json;charset=UTF-8';
+                p = JSON.stringify(p);
+            }
+
+
             $myhttp(key, $scope.loading).post(url, p, function (data) {
                 try {
                     data = JSON.parse(data);
